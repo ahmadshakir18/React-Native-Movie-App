@@ -36,7 +36,7 @@ class Row extends React.Component {
       
       <TouchableOpacity onPress={() => this.openMovieDetails(this.props[1], this.props[0])}>
       <View style={styles.container}>
-        <Image source={{ uri: this.props[0].keyArtImages[0].url}} style={styles.photo} />
+        <Image source={{ uri: this.props[0].keyArtImages ? this.props[0].keyArtImages[0].url : ""}} style={styles.photo} />
         <View style={{flex: 1, flexDirection: 'column', alignItems: 'center',}}>
         <Text style={styles.movieName}>
           {this.props[0].headline + "\n"}
