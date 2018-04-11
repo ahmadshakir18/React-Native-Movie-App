@@ -33,7 +33,7 @@ render() {
     </View>
     <View style={styles.container}>
     <VideoPlayer
-thumbnail={{ uri: movie.cardImages[0].url }}
+thumbnail={{ uri: movie.cardImages.slice(-1)[0].url }}
 thumbnailStyle = {{height:15}}
 video={{ uri: movie.videos[0].url }}
 />

@@ -19,33 +19,56 @@ export default class FavsScreen extends React.Component {
     }
 
     _renderRow(rowData) {
-        return (<FavsRow item={rowData} />);
+        
+        return (<FavsRow movie={rowData} />);
     }
 
-    _removeItem(item) {
-        favs.splice(favs.indexOf(item), 1);
+    _removeItem(movie) {
+        let favs = this.state.favs
+        var ind = -1
+        for (index in favs) {
+            if (favs[index].id == movie.id) {
+                ind = index
+            }
+        }
+        if (ind !== -1) {
+            favs.splice(ind, 1);
+            this.updateFavsInStorage(favs)
+        }
+        
+      }
+
+      async updateFavsInStorage(favs) {
+
+        await AsyncStorage.setItem("favs", JSON.stringify(favs))
+        
+        this.setState({favs: favs})
       }
 
     render() {
+        this.getFavsFromStorage()
         favs = this.state.favs
-        alert(favs.length)
         if (favs.length > 0) {
         return (
             <AnimatedList
             animation="scale"
         items={favs}
-        duration={300}
+        duration={400}
         renderRow={this._renderRow}  
-        onRemove={(item) => this._removeItem(item)
-        }
-/>
+        onRemove={(movie) => this._removeItem(movie)}
+        />
         );
     }
     else {
-        return null
+        return (
+        <Text>No favs to show :(</Text>
+        );
     }
     }
 
+    _favMovieRowClicked() {
+        alert("lol")
+    }
 
       async getFavsFromStorage() {
         const favourites = await AsyncStorage.getItem("favs")
@@ -56,10 +79,7 @@ export default class FavsScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        marginTop: 15,
-        paddingLeft: 5,
-        paddingRight: 5
+        flex: 1
       },
     separator: {
         flex: 1,
