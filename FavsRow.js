@@ -1,16 +1,20 @@
 import React from 'react';
 import { Navigation } from 'react-native-navigation';
-import { TouchableHighlight, AsyncStorage, View, ListView, StyleSheet, Navigator, Dimensions } from 'react-native';
+import { TouchableOpacity, AsyncStorage, View, ListView, StyleSheet, Navigator, Dimensions } from 'react-native';
 import {Tile, Card, ListItem, Button, Text, List} from 'react-native-elements';
 import AnimatedList from 'react-native-animated-list';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-const FavsRow = (props) => (
-  <View style={{height:310, backgroundColor:"white"}} >
+class FavsRow extends React.Component {
+
+  constructor(props) {
+    super(props);
+    return (
+  <View style={{height:285, backgroundColor:"white"}} >
     <Tile
         imageSrc={{ uri: props.movie.cardImages.slice(-1)[0].url}}
-        onPress={() => gotoDetailsPage()}
+        onPress={() => this.openMovieDetails(props.movie, props.navigation)}
       >
         <View style={styles.cardOverlay}>
         <View style={{flex:1, flexDirection: "row", alignItems: "center", justifyContent:"flex-start"}}>
@@ -20,17 +24,20 @@ const FavsRow = (props) => (
         </View></View>
       </Tile>
       </View>
-      
   );
+}
 
-  function gotoDetailsPage() {
-    
-  }
+openMovieDetails(movie, nav) {
+  nav.push({
+    screen: 'app.MovieDetailScreen',
+    title: movie.headline,
+    passProps: {
+      movie: movie
+    }
+  });
+}
 
-  FavsRow.propTypes = {
-    onRemove: React.PropTypes.func,
-    movie: React.PropTypes.object
-    };
+}
 
   const styles = StyleSheet.create({
     cardOverlay: {
