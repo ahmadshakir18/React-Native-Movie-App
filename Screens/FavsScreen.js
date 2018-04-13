@@ -18,9 +18,8 @@ export default class FavsScreen extends React.Component {
         this.getFavsFromStorage()
     }
 
-    _renderRow(rowData) {
-        
-        return (<FavsRow movie={rowData} />);
+    _renderRow(rowData, nav) {
+        return new FavsRow({movie: rowData, navigation: nav})
     }
 
     _removeItem(movie) {
@@ -38,6 +37,7 @@ export default class FavsScreen extends React.Component {
         
       }
 
+
       async updateFavsInStorage(favs) {
 
         await AsyncStorage.setItem("favs", JSON.stringify(favs))
@@ -54,7 +54,7 @@ export default class FavsScreen extends React.Component {
             animation="scale"
         items={favs}
         duration={400}
-        renderRow={this._renderRow}  
+        renderRow={(rowData) => this._renderRow(rowData, this.props.navigator)}
         onRemove={(movie) => this._removeItem(movie)}
         />
         );
@@ -66,7 +66,7 @@ export default class FavsScreen extends React.Component {
     }
     }
 
-    _favMovieRowClicked() {
+    _openDetails(movie) {
         alert("lol")
     }
 
