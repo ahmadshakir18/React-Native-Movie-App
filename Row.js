@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { Rating } from 'react-native-elements';
+import StarRating from 'react-native-star-rating'
 
 
 const styles = StyleSheet.create({
@@ -8,12 +9,13 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'flex-start'
   },
   movieName: {
     marginLeft: 8,
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: "white"
   },
   synopsis: {
     marginLeft: 8,
@@ -24,6 +26,11 @@ const styles = StyleSheet.create({
   photo: {
     height: 180,
     width: 128
+  },
+  starRating: {
+    alignSelf: "flex-start",
+    padding:5,
+    paddingLeft: 8
   }
 });
 
@@ -44,13 +51,21 @@ class Row extends React.Component {
           {this.props[0].synopsis}
         </Text>
         </Text>
-        <Rating
-  showRating
-  type="star"
-  fractions={1}
-  startingValue={this.props[0].rating}
-  imageSize={25}
-  style={{ paddingVertical: 10 }} />
+        <View style={styles.starRating}>
+        <Text style={{fontWeight: "bold", paddingLeft:5, color:"white"}}>Avg Rating:</Text>
+        <StarRating
+        disabled={true}
+        emptyStar={'ios-star-outline'}
+        fullStar={'ios-star'}
+        halfStar={'ios-star-half'}
+        iconSet={'Ionicons'}
+        maxStars={5}
+        rating={this.props[0].rating}
+        fullStarColor={'#F1C533'}
+        starSize={28}
+      />
+
+        </View>
         </View>
         
       </View>
