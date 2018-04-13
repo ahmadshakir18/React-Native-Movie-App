@@ -19,7 +19,7 @@ class FavsRow extends React.Component {
         <View style={styles.cardOverlay}>
         <View style={{flex:1, flexDirection: "row", alignItems: "center", justifyContent:"flex-start"}}>
           <Text style={{color: "white", fontSize:25, flex:1, paddingLeft:10 }}>{props.movie.headline}</Text>
-          <Icon.Button  name="heart" style={{flex:1}} backgroundColor="transparent" size={30} color="red" onPress={() => props.onRemove(props.movie)}>
+          <Icon.Button  name="heart" style={{flex:1}} backgroundColor="transparent" size={30} color="red" onPress={() => this.props.onRemove(props.movie)}>
   </Icon.Button>
         </View></View>
       </Tile>
@@ -38,6 +38,7 @@ openMovieDetails(movie, nav) {
 }
 
 }
+
 
   const styles = StyleSheet.create({
     cardOverlay: {

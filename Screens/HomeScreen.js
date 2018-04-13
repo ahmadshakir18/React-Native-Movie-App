@@ -14,6 +14,11 @@ class HomeScreen extends React.Component {
   carouselImageIndex = 0
   carouselMovies = []
   
+  static navigatorStyle = {
+    navBarTextColor: '#00000F',
+    navBarBackgroundColor: '#F1C533'
+  };
+  
   constructor(props) {
 
     super(props);
@@ -53,9 +58,10 @@ render() {
         <View style={{flex: 1,
           flexDirection: 'column',
           justifyContent: 'center',
-          alignItems: 'center',}}>
-      <ActivityIndicator size="large" color="#0000ff" />
-      <Text style={{marginTop:8}}>Loading...</Text>
+          alignItems: 'center',
+          backgroundColor: "black"}}>
+      <ActivityIndicator size="large" color="#F1C533" />
+      <Text style={{marginTop:8, color: "grey"}}>Loading...</Text>
       </View>
     );
     }

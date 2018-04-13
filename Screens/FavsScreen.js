@@ -19,7 +19,7 @@ export default class FavsScreen extends React.Component {
     }
 
     _renderRow(rowData, nav) {
-        return new FavsRow({movie: rowData, navigation: nav})
+        return new FavsRow({movie: rowData, navigation: nav, onRemove: (movie) => this._removeItem(movie)})
     }
 
     _removeItem(movie) {
@@ -55,7 +55,7 @@ export default class FavsScreen extends React.Component {
         items={favs}
         duration={400}
         renderRow={(rowData) => this._renderRow(rowData, this.props.navigator)}
-        onRemove={(movie) => this._removeItem(movie)}
+        onRemove={() => null}
         />
         );
     }
