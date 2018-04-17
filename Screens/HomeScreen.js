@@ -16,7 +16,8 @@ class HomeScreen extends React.Component {
   
   static navigatorStyle = {
     navBarTextColor: '#00000F',
-    navBarBackgroundColor: '#F1C533'
+    navBarBackgroundColor: '#F1C533',
+    navBarButtonColor: '#00000f'
   };
   
   constructor(props) {
@@ -29,7 +30,7 @@ class HomeScreen extends React.Component {
     
     return (
       <TouchableOpacity key={index} onPress={() => this.carouselImagePressed()}>
-        <View key={index}>
+        <View key={index} >
             <Image style={{ width: BannerWidth, height: BannerHeight }} source={{ uri: image }} />
         </View>
         </TouchableOpacity>
@@ -75,6 +76,7 @@ render() {
     renderRow={(data) => this._renderRow(data)}
     renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />} 
     renderHeader={() => this.renderCarouselInHeader()}
+    style={{backgroundColor:"#1c1c1c"}}
     />
 
     :null
@@ -157,7 +159,7 @@ const styles = StyleSheet.create({
     separator: {
       flex: 1,
       height: StyleSheet.hairlineWidth,
-      backgroundColor: '#8E8E8E',
+      backgroundColor: '#939393'
     }
 });
 

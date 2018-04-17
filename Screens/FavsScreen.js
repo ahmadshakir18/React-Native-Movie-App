@@ -9,6 +9,11 @@ import FavsRow from '../FavsRow'
 
 export default class FavsScreen extends React.Component {
 
+    static navigatorStyle = {
+        navBarTextColor: '#00000f',
+        navBarBackgroundColor: '#F1C533',
+        navBarButtonColor: '#00000f'
+      };
 
     constructor(props) {
         super(props)

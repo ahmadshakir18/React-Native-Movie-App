@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigation } from 'react-native-navigation';
-import { TouchableHighlight, View, Text, Image, StyleSheet, ScrollView, AsyncStorage } from 'react-native';
+import { TouchableOpacity, View, Text, Image, StyleSheet, ScrollView, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
 import { Card, ListItem, Button, Rating } from 'react-native-elements';
 import { RkModalImg } from 'react-native-ui-kitten';
@@ -14,16 +14,24 @@ var favs = []
 
 const CONTENT = [
   {
-    title: 'Movie Info'
+    title: 'Movie Info',
+    headerColor: '#632e39',
+    contentBgColor: '#d6a4af'
   },
   {
-    title: 'Cast'
+    title: 'Cast',
+    headerColor: '#332e63',
+    contentBgColor: '#a09dc6'
   },
   {
-    title: 'Synopsis'
+    title: 'Synopsis',
+    headerColor: '#2e5363',
+    contentBgColor: '#a0b6bf'
   },
   {
-    title: 'Movie Plot'
+    title: 'Movie Plot',
+    headerColor: '#2e6344',
+    contentBgColor: '#a4bcad'
   }
 ];
 
@@ -52,11 +60,6 @@ const SELECTORS = [
 
 export default class MovieDetailScreen extends React.Component {
 
-  state = {
-    activeSection: false,
-    collapsed: true,
-  };
-
   _toggleExpanded = () => {
     this.setState({ collapsed: !this.state.collapsed });
   }
@@ -67,7 +70,7 @@ export default class MovieDetailScreen extends React.Component {
 
   _renderHeader(section, i, isActive) {
     return (
-      <Animatable.View duration={400} style={[styles.header, isActive ? styles.active : styles.inactive]} transition="backgroundColor">
+      <Animatable.View duration={400} style={[styles.header, {backgroundColor: section.headerColor, justifyContent:'center'}]} transition="backgroundColor">
         <Text style={styles.headerText}>{section.title}</Text>
       </Animatable.View>
     );
@@ -77,7 +80,7 @@ export default class MovieDetailScreen extends React.Component {
     switch (section.title) {
       case "Movie Info":
     return (
-      <Animatable.View duration={400}  style={[styles.content, isActive ? styles.active : styles.inactive]} transition="backgroundColor">
+      <Animatable.View duration={400}  style={[styles.content, {backgroundColor: section.contentBgColor}]} transition="backgroundColor">
         <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
           <Text style={styles.movieInfoText}>Year Released:                 <Text style={styles.movieInfoText2}>{movie.year}</Text></Text>
           <Text style={styles.movieInfoText}>Run Time:                          <Text style={styles.movieInfoText2}>{movie.duration/60} mins</Text></Text>
@@ -91,7 +94,7 @@ export default class MovieDetailScreen extends React.Component {
 
     case "Cast":
     return (
-      <Animatable.View duration={400}  style={[styles.content, isActive ? styles.active : styles.inactive]} transition="backgroundColor">
+      <Animatable.View duration={400}  style={[styles.content, {backgroundColor: section.contentBgColor}]} transition="backgroundColor">
         <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
         <View style={{alignItems: 'center'}}>
     {
@@ -109,7 +112,7 @@ export default class MovieDetailScreen extends React.Component {
 
     case "Synopsis":
     return (
-      <Animatable.View duration={400}  style={[styles.content, isActive ? styles.active : styles.inactive]} transition="backgroundColor">
+      <Animatable.View duration={400}  style={[styles.content, {backgroundColor: section.contentBgColor}]} transition="backgroundColor">
         <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
         <Text style={styles.moviePlot}>{movie.synopsis}</Text>
            </Animatable.View>
@@ -118,7 +121,7 @@ export default class MovieDetailScreen extends React.Component {
 
     case "Movie Plot":
     return (
-      <Animatable.View duration={400}  style={[styles.content, isActive ? styles.active : styles.inactive]} transition="backgroundColor">
+      <Animatable.View duration={400}  style={[styles.content, {backgroundColor: section.contentBgColor}]} transition="backgroundColor">
         <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
         <Text style={styles.moviePlot}>{movie.body}</Text>
            </Animatable.View>
@@ -133,8 +136,11 @@ export default class MovieDetailScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      heartColor: "lightgray"
-    }
+      heartColor: "lightgray",
+      activeSection: 0,
+      collapsed: false,
+      };
+      
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
   
@@ -152,33 +158,33 @@ render() {
   const movie = this.props.movie;
   heartColor = this.state.heartColor
   return (
-    <ScrollView>
+    <ScrollView style= {{backgroundColor:"#1c1c1c"}}>
     <View style={styles.container}>
     <View style={styles.movieTitleView}>
     <Text style={styles.movieTitle}>{movie.headline}</Text>
-    <Icon.Button name="heart" backgroundColor="transparent" size={35} color={heartColor} onPress={() => this.favButtonPressed(movie)}>
+    <Icon.Button name="heart" backgroundColor="transparent" size={28} color={heartColor} onPress={() => this.favButtonPressed(movie)}>
   </Icon.Button>
     </View>
     <View>
     <VideoPlayer
-thumbnail={{ uri: movie.cardImages.slice(-1)[0].url }}
+thumbnail={{ uri: movie.cardImages.slice(-1)[0].url ? movie.cardImages.slice(-1)[0].url : "" }}
 thumbnailStyle = {{height:15}}
 video={{ uri: movie.videos[0].url }}
 />
     </View>
     
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: "#bc971c"}]}>
 
-        <View style={styles.selectors}>
-          <Text style={styles.selectTitle}>Select:</Text>
+        <View style={[styles.selectors, {height: 22}]}>
+          
           {SELECTORS.map(selector => (
-            <TouchableHighlight key={selector.title} onPress={this._setSection.bind(this, selector.value)}>
+            <TouchableOpacity key={selector.title} onPress={this._setSection.bind(this, selector.value)}>
               <View style={styles.selector}>
                 <Text style={selector.value === this.state.activeSection && styles.activeSelector}>
                   {selector.title}
                 </Text>
               </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
           ))}
         </View>
 
@@ -197,6 +203,7 @@ video={{ uri: movie.videos[0].url }}
     );
  
 }
+
 
 async getFavsFromStorage() {
   const favourites = await AsyncStorage.getItem("favs")
@@ -249,7 +256,6 @@ const styles = StyleSheet.create({
   movieTitleView : {
     flex:1,
     flexDirection: 'row',
-    backgroundColor: 'white',
     height:40,
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -258,7 +264,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingLeft: 8,
     fontSize: 20,
-    
+    color: "white"
   },
   imageContainer: {
     paddingLeft: 0,
@@ -299,9 +305,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#F5FCFF',
-  },
+    justifyContent: 'center'
+    },
   title: {
     textAlign: 'center',
     fontSize: 22,
@@ -309,17 +314,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   header: {
-    backgroundColor: '#F5FCFF',
     padding: 10,
+    height: 65
   },
   headerText: {
     textAlign: 'center',
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '800',
+    color:"white"
   },
   content: {
-    padding: 20,
-    backgroundColor: '#fff',
+    padding: 20
   },
   active: {
     backgroundColor: 'rgba(255,255,255,1)',
@@ -331,18 +336,20 @@ const styles = StyleSheet.create({
     margin: 10,
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   selector: {
-    backgroundColor: '#F5FCFF',
-    padding: 10,
+    padding: 10
   },
   activeSelector: {
     fontWeight: 'bold',
+    fontSize:17
   },
   selectTitle: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '700',
     padding: 10,
+    color: "black"
   },
 });
 
