@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
+import Image from 'react-native-image-progress';
 import { Rating } from 'react-native-elements';
 import StarRating from 'react-native-star-rating'
 

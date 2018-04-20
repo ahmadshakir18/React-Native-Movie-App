@@ -1,8 +1,7 @@
 import React from 'react'
 import { Navigation } from 'react-native-navigation';
-import { TouchableOpacity, Dimensions, View, Text, ListView, StyleSheet, ActivityIndicator, Button} from 'react-native'
+import { TouchableOpacity, Dimensions, View, Text, ListView, StyleSheet, ActivityIndicator, Button } from 'react-native'
 import Image from 'react-native-image-progress';
-import Progress from 'react-native-progress';
 import Carousel from 'react-native-banner-carousel';
 import { SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux'
