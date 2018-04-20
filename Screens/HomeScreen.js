@@ -1,7 +1,10 @@
 import React from 'react'
 import { Navigation } from 'react-native-navigation';
-import { TouchableOpacity, Dimensions, View, Text, ListView, StyleSheet, ActivityIndicator, Image } from 'react-native'
+import { TouchableOpacity, Dimensions, View, Text, ListView, StyleSheet, ActivityIndicator, Button} from 'react-native'
+import Image from 'react-native-image-progress';
+import Progress from 'react-native-progress';
 import Carousel from 'react-native-banner-carousel';
+import { SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux'
 import { fetchMoviesFromAPI, getFavs } from '../actions'
 import Row from '../Row';
@@ -19,10 +22,42 @@ class HomeScreen extends React.Component {
     navBarBackgroundColor: '#F1C533',
     navBarButtonColor: '#00000f'
   };
+
+  static navigatorButtons = {
+    rightButtons: [
+      {
+        systemItem: 'search',
+        id: 'search'
+      }
+    ]
+  }
+
+  onNavigatorEvent(event) { // this is the onPress handler for the nav button/buttons
+    if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
+      if (event.id == 'search') { // this is the same id field from the static navigatorButtons definition
+        this.refs.listView.scrollTo({animated: true}, 0);
+        if (this.state.showSearchBar) {
+          this.refs.searchBar.focus()
+        }
+        else {
+          this.setState({showSearchBar: true})
+        }
+      }
+    }
+  }
+  
+  
+  hideSearchBarButton() {
+    this.setState({showSearchBar: false});
+}
   
   constructor(props) {
 
     super(props);
+    this.state={
+      showSearchBar: false
+    }
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     this.props.getMovies("https://s3.amazonaws.com/vodassets/showcase.json");
   }
   
@@ -38,14 +73,23 @@ class HomeScreen extends React.Component {
 }
 
 render() {
-  const { movies, error, isFetching } = this.props.movies;
+
+  var { movies, error, isFetching } = this.props.movies;
+  showSearchBar = this.state.showSearchBar
   
   movies.sort(function(a, b){return a.headline > b.headline});
   
-  const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+  const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.headline !== r2.headline});
+  if (this.state.showSearchResults) {
+    this.state = {
+      dataSource: ds.cloneWithRows(this.state.searchResults),
+    };
+  }
+  else {
     this.state = {
       dataSource: ds.cloneWithRows(movies),
     };
+  }
     if (error) {
       alert("Unable to retrieve movies from server. Please try again :(");
       return(
@@ -55,6 +99,9 @@ render() {
       );
     }
     else if(isFetching) {
+      this.props.navigator.setStyle({
+        navBarHidden : true
+      });
       return(
         <View style={{flex: 1,
           flexDirection: 'column',
@@ -68,14 +115,19 @@ render() {
     }
     else {
 
+      this.props.navigator.setStyle({
+        navBarHidden : false
+      });
+      
   return ( 
     movies.length?
 
     <ListView
+    ref='listView'
     dataSource={this.state.dataSource}
     renderRow={(data) => this._renderRow(data)}
     renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />} 
-    renderHeader={() => this.renderCarouselInHeader()}
+    renderHeader={() => this.renderCarouselInHeader(showSearchBar)}
     style={{backgroundColor:"#1c1c1c"}}
     />
 
@@ -92,15 +144,34 @@ _renderRow(data) {
     
 }
 
-renderCarouselInHeader() {
+renderCarouselInHeader(showSearchBar) {
   movs = this.props.movies.movies.slice(0)
   movs.sort(function(a, b){return a.year < b.year})
   for (i = 0; i < 8; i++) {
     this.carouselMovies.push(movs[i])
   }
-  
   return (
-    
+    <View>
+      {showSearchBar && 
+      <View style={{flex:1, flexDirection:'row'}}> 
+      <View style={{width:BannerWidth-55}}>
+      <SearchBar
+      ref={searchBar => this.searchBar = searchBar}
+      round
+      autoFocus
+      placeholder='Search...' 
+      onChangeText={(text) => this.searchInMovies(text)}
+      containerStyle={{backgroundColor:"#1c1c1c"}}
+      />
+</View>
+      <View style={{width:55, alignSelf:'center'}}>
+      <Button
+  title="Hide"
+  color="#ffffe6"
+  onPress={() => this.hideSearchBarButton()}
+/></View>
+</View>
+      }
     <Carousel
       autoplay
       autoplayTimeout={4000}
@@ -111,7 +182,33 @@ renderCarouselInHeader() {
       >
       {this.carouselMovies.map((image, index) => this.renderPage(image.cardImages.slice(-1)[0].url, index))}
       </Carousel>
+      </View>
   );
+}
+
+searchInMovies(text) {
+  movies = this.props.movies.movies
+  if (text.length > 3) {
+    lowerCasedStr = text.toLowerCase()
+    searchResults = []
+    for(i in movies) {
+      if (movies[i].headline.toLowerCase().match(lowerCasedStr) || (movies[i].synopsis ? movies[i].synopsis.toLowerCase().match(lowerCasedStr) : false)) {
+        searchResults.push(movies[i])
+      }
+    }
+    this.setState({
+      searchResults: searchResults,
+      showSearchResults: true,
+      showSearchBar: true
+    });
+  }
+  else if (text.length <= 3) {
+    this.setState({
+      searchResults: movies,
+      showSearchResults: true,
+      showSearchBar: true
+    });
+  }
 }
 
 carouselImagePressed() {

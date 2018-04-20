@@ -9,14 +9,15 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Animatable from 'react-native-animatable';
 import Collapsible from 'react-native-collapsible';
 import Accordion from 'react-native-collapsible/Accordion';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
 var favs = []
 
 const CONTENT = [
   {
     title: 'Movie Info',
-    headerColor: '#632e39',
-    contentBgColor: '#d6a4af'
+    headerColor: '#2e5363',
+    contentBgColor: '#a0b6bf'
   },
   {
     title: 'Cast',
@@ -25,8 +26,8 @@ const CONTENT = [
   },
   {
     title: 'Synopsis',
-    headerColor: '#2e5363',
-    contentBgColor: '#a0b6bf'
+    headerColor: '#632e39',
+    contentBgColor: '#d6a4af'
   },
   {
     title: 'Movie Plot',
@@ -140,7 +141,7 @@ export default class MovieDetailScreen extends React.Component {
       activeSection: 0,
       collapsed: false,
       };
-      
+
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
   
@@ -159,6 +160,12 @@ render() {
   heartColor = this.state.heartColor
   return (
     <ScrollView style= {{backgroundColor:"#1c1c1c"}}>
+    <Toast
+    ref="toast"
+    position='top'
+    positionValue={200}  
+    fadeInDuration={500}
+    fadeOutDuration={1200}/>
     <View style={styles.container}>
     <View style={styles.movieTitleView}>
     <Text style={styles.movieTitle}>{movie.headline}</Text>
@@ -219,9 +226,11 @@ async getFavsFromStorage() {
 favButtonPressed(targetItem) {
   if (!this.isInFavs(targetItem)) {
     this.addFavToStorage(targetItem)
+    this.refs.toast.show('Movie added to favorites :D');
   }
   else {
     this.removeFavFromStorage(targetItem)
+    this.refs.toast.show('Movie removed from favorites :(');
   }
 }
 
