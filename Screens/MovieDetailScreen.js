@@ -13,26 +13,20 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 
 var favs = []
 
+const animationForAccordion = 'fadeIn'
+
 const CONTENT = [
   {
-    title: 'Movie Info',
-    headerColor: '#2e5363',
-    contentBgColor: '#a0b6bf'
+    title: 'Movie Info'
   },
   {
-    title: 'Cast',
-    headerColor: '#332e63',
-    contentBgColor: '#a09dc6'
+    title: 'Cast'
   },
   {
-    title: 'Synopsis',
-    headerColor: '#632e39',
-    contentBgColor: '#d6a4af'
+    title: 'Synopsis'
   },
   {
-    title: 'Movie Plot',
-    headerColor: '#2e6344',
-    contentBgColor: '#a4bcad'
+    title: 'Movie Plot'
   }
 ];
 
@@ -52,11 +46,7 @@ const SELECTORS = [
   {
     title: 'Plot',
     value: 3,
-  },
-  {
-    title: 'none',
-    value: false,
-  },
+  }
 ];
 
 export default class MovieDetailScreen extends React.Component {
@@ -71,18 +61,16 @@ export default class MovieDetailScreen extends React.Component {
 
   _renderHeader(section, i, isActive) {
     return (
-      <Animatable.View duration={400} style={[styles.header, {backgroundColor: section.headerColor, justifyContent:'center'}]} transition="backgroundColor">
-        <Text style={styles.headerText}>{section.title}</Text>
-      </Animatable.View>
+      <View style={{height:0}}></View>
     );
   }
 
   _renderContent(section, i, isActive, movie) {
     switch (section.title) {
-      case "Movie Info":
+      case "Info":
     return (
-      <Animatable.View duration={400}  style={[styles.content, {backgroundColor: section.contentBgColor}]} transition="backgroundColor">
-        <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
+      <Animatable.View duration={100}  style={[styles.content]} transition="backgroundColor">
+        <Animatable.View animation={isActive ? animationForAccordion : undefined}>
           <Text style={styles.movieInfoText}>Year Released:                 <Text style={styles.movieInfoText2}>{movie.year}</Text></Text>
           <Text style={styles.movieInfoText}>Run Time:                          <Text style={styles.movieInfoText2}>{movie.duration/60} mins</Text></Text>
           <Text style={styles.movieInfoText}>Cert:                                    <Text style={styles.movieInfoText2}>{movie.cert}</Text></Text>
@@ -95,8 +83,8 @@ export default class MovieDetailScreen extends React.Component {
 
     case "Cast":
     return (
-      <Animatable.View duration={400}  style={[styles.content, {backgroundColor: section.contentBgColor}]} transition="backgroundColor">
-        <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
+      <Animatable.View duration={100}  style={[styles.content]} transition="backgroundColor">
+        <Animatable.View animation={isActive ? animationForAccordion : undefined}>
         <View style={{alignItems: 'center'}}>
     {
       movie.cast.map((actorName, i) => {
@@ -113,17 +101,17 @@ export default class MovieDetailScreen extends React.Component {
 
     case "Synopsis":
     return (
-      <Animatable.View duration={400}  style={[styles.content, {backgroundColor: section.contentBgColor}]} transition="backgroundColor">
-        <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
+      <Animatable.View duration={100}  style={[styles.content]} transition="backgroundColor">
+        <Animatable.View animation={isActive ? animationForAccordion : undefined}>
         <Text style={styles.moviePlot}>{movie.synopsis}</Text>
            </Animatable.View>
       </Animatable.View>
     );
 
-    case "Movie Plot":
+    case "Plot":
     return (
-      <Animatable.View duration={400}  style={[styles.content, {backgroundColor: section.contentBgColor}]} transition="backgroundColor">
-        <Animatable.View animation={isActive ? 'bounceIn' : undefined}>
+      <Animatable.View duration={100}  style={[styles.content]} transition="backgroundColor">
+        <Animatable.View animation={isActive ? animationForAccordion : undefined}>
         <Text style={styles.moviePlot}>{movie.body}</Text>
            </Animatable.View>
       </Animatable.View>
@@ -159,7 +147,7 @@ render() {
   const movie = this.props.movie;
   heartColor = this.state.heartColor
   return (
-    <ScrollView style= {{backgroundColor:"#1c1c1c"}}>
+    <ScrollView style= {{backgroundColor:"#454445"}}>
     <Toast
     ref="toast"
     position='top'
@@ -167,11 +155,7 @@ render() {
     fadeInDuration={500}
     fadeOutDuration={1200}/>
     <View style={styles.container}>
-    <View style={styles.movieTitleView}>
-    <Text style={styles.movieTitle}>{movie.headline}</Text>
-    <Icon.Button name="heart" backgroundColor="transparent" size={28} color={heartColor} onPress={() => this.favButtonPressed(movie)}>
-  </Icon.Button>
-    </View>
+    
     <View>
     <VideoPlayer
 thumbnail={{ uri: movie.cardImages.slice(-1)[0].url ? movie.cardImages.slice(-1)[0].url : "" }}
@@ -179,15 +163,19 @@ thumbnailStyle = {{height:15}}
 video={{ uri: movie.videos ? movie.videos.slice(-1)[0].url : ' '}}
 />
     </View>
-    
-    <View style={[styles.container, {backgroundColor: "#bc971c"}]}>
+    <View style={styles.movieTitleView}>
+    <Text style={styles.movieTitle}>{movie.headline}</Text>
+    <Icon.Button name="heart" backgroundColor="transparent" size={28} color={heartColor} onPress={() => this.favButtonPressed(movie)}>
+  </Icon.Button>
+    </View>
+    <View style={[styles.container, {backgroundColor: "#007E90"}]}>
 
         <View style={[styles.selectors, {height: 22}]}>
           
           {SELECTORS.map(selector => (
             <TouchableOpacity key={selector.title} onPress={this._setSection.bind(this, selector.value)}>
               <View style={styles.selector}>
-                <Text style={selector.value === this.state.activeSection && styles.activeSelector}>
+                <Text style={[selector.value === this.state.activeSection && styles.activeSelector, {color: "#F5F2DC"}]}>
                   {selector.title}
                 </Text>
               </View>
@@ -197,7 +185,7 @@ video={{ uri: movie.videos ? movie.videos.slice(-1)[0].url : ' '}}
 
         <Accordion
           activeSection={this.state.activeSection}
-          sections={CONTENT}
+          sections={SELECTORS}
           renderHeader={this._renderHeader}
           renderContent={(content, index, isActive) => this._renderContent(content, index, isActive, movie)}
           duration={400}
@@ -265,15 +253,16 @@ const styles = StyleSheet.create({
   movieTitleView : {
     flex:1,
     flexDirection: 'row',
-    height:40,
+    height:50,
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    //backgroundColor: '#990026'
     },
   movieTitle: {
     fontWeight: 'bold',
     paddingLeft: 8,
     fontSize: 20,
-    color: "white"
+    color: "#F5F2DC"
   },
   imageContainer: {
     paddingLeft: 0,
@@ -290,7 +279,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0b7eff'
   },
   buttonText: {
-    color: 'white'
+    color: '#F5F2DC'
   },
   image: {
     height: 50,
@@ -301,7 +290,8 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 4,
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: "#F5F2DC"
   },
   movieInfoText2: {
     fontWeight: 'normal'
@@ -310,7 +300,8 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginBottom: 2,
     fontSize: 15,
-    fontWeight: 'normal'
+    fontWeight: 'normal',
+    color: "#F5F2DC"
   },
   container: {
     flex: 1,
@@ -330,10 +321,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '800',
-    color:"white"
+    color:"#F5F2DC"
   },
   content: {
-    padding: 20
+    paddingTop: 15,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+    backgroundColor: "#163342"
   },
   active: {
     backgroundColor: 'rgba(255,255,255,1)',
@@ -346,19 +341,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    flex:1, 
+    flexDirection: 'row',
+    justifyContent: 'space-around'
   },
   selector: {
     padding: 10
   },
   activeSelector: {
     fontWeight: 'bold',
-    fontSize:17
+    textDecorationLine: 'underline'
   },
   selectTitle: {
     fontSize: 16,
     fontWeight: '700',
     padding: 10,
-    color: "black"
+    color: "#F5F2DC"
   },
 });
 

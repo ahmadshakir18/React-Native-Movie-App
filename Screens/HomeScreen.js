@@ -17,9 +17,9 @@ class HomeScreen extends React.Component {
   carouselMovies = []
   
   static navigatorStyle = {
-    navBarTextColor: '#00000F',
-    navBarBackgroundColor: '#F1C533',
-    navBarButtonColor: '#00000f'
+    navBarTextColor: '#F5F2DC',
+    navBarBackgroundColor: '#FF5729',
+    navBarButtonColor: '#F5F2DC'
   };
 
   static navigatorButtons = {
@@ -106,7 +106,7 @@ render() {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: "black"}}>
+          backgroundColor: "#454445"}}>
       <ActivityIndicator size="large" color="#F1C533" />
       <Text style={{marginTop:8, color: "grey"}}>Loading...</Text>
       </View>
@@ -127,7 +127,7 @@ render() {
     renderRow={(data) => this._renderRow(data)}
     renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />} 
     renderHeader={() => this.renderCarouselInHeader(showSearchBar)}
-    style={{backgroundColor:"#1c1c1c"}}
+    style={{backgroundColor:"#454445"}}
     />
 
     :null
@@ -146,11 +146,13 @@ _renderRow(data) {
 renderCarouselInHeader(showSearchBar) {
   movs = this.props.movies.movies.slice(0)
   movs.sort(function(a, b){return a.year < b.year})
+  this.carouselMovies = []
   for (i = 0; i < 8; i++) {
     this.carouselMovies.push(movs[i])
   }
+  
   return (
-    <View>
+    <View style={{backgroundColor:"#454445"}}>
       {showSearchBar && 
       <View style={{flex:1, flexDirection:'row'}}> 
       <View style={{width:BannerWidth-55}}>
@@ -160,7 +162,7 @@ renderCarouselInHeader(showSearchBar) {
       autoFocus
       placeholder='Search...' 
       onChangeText={(text) => this.searchInMovies(text)}
-      containerStyle={{backgroundColor:"#1c1c1c"}}
+      containerStyle={{backgroundColor:"#454445"}}
       />
 </View>
       <View style={{width:55, alignSelf:'center'}}>
@@ -241,7 +243,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0b7eff'
   },
   buttonText: {
-    color: 'white'
+    color: '#282828'
   },
   list : {
     flex: 1,

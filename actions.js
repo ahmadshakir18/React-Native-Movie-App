@@ -32,20 +32,3 @@ export function getMoviesFailure() {
     type: FETCHING_MOVIES_FAILURE
   }
 }
-
-  export function getFavs() {
-    return (dispatch) => {
-      try {
-        AsyncStorage.setItem('@MySuperStore:key', 'I like to save it.')
-        const value =  AsyncStorage.getItem('@MySuperStore:key');
-        mm = [value]
-        return {
-          type: GET_FAVS_SUCCESS,
-          mm
-        }
-      } catch (error) {
-
-      }
-    }
-    
-    }
