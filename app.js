@@ -35,9 +35,9 @@ class App extends React.Component {
       }
     ],
     tabsStyle: { // optional, add this if you want to style the tab bar beyond the defaults
-      tabBarButtonColor: '#666666', // optional, change the color of the tab icons and text (also unselected). On Android, add this to appStyle
-      tabBarSelectedButtonColor: '#F1C533', // optional, change the color of the selected tab icon and text (only selected). On Android, add this to appStyle
-      tabBarBackgroundColor: '#00000F', // optional, change the background color of the tab bar
+      tabBarButtonColor: '#F5F2DC', // optional, change the color of the tab icons and text (also unselected). On Android, add this to appStyle
+      tabBarSelectedButtonColor: '#FF5729', // optional, change the color of the selected tab icon and text (only selected). On Android, add this to appStyle
+      tabBarBackgroundColor: '#0A0A0A', // optional, change the background color of the tab bar
       initialTabIndex: 0, // optional, the default selected bottom tab. Default: 0. On Android, add this to appStyle
     }
   });

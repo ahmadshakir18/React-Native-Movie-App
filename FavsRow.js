@@ -4,7 +4,8 @@ import { TouchableOpacity, AsyncStorage, View, ListView, StyleSheet, Navigator, 
 import {Tile, Card, ListItem, Button, Text, List} from 'react-native-elements';
 import AnimatedList from 'react-native-animated-list';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import StarRating from 'react-native-star-rating'
+import StarRating from 'react-native-star-rating';
+import Image from 'react-native-image-progress';
 
 
 class FavsRow extends React.Component {
@@ -12,10 +13,11 @@ class FavsRow extends React.Component {
   constructor(props) {
     super(props);
     return (
-  <View style={{height:280, backgroundColor:"white"}} >
+  <View style={{height:280}} >
     <Tile
         imageSrc={{ uri: props.movie.cardImages.slice(-1)[0].url}}
         onPress={() => this.openMovieDetails(props.movie, props.navigation)}
+        imageContainerStyle={{backgroundColor: 'grey'}}
       >
         <View style={styles.cardOverlay}>
         <View style={{flex:1, flexDirection: "row"}}>

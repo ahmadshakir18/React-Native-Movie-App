@@ -11,9 +11,9 @@ import FavsRow from '../FavsRow'
 export default class FavsScreen extends React.Component {
 
     static navigatorStyle = {
-        navBarTextColor: '#00000f',
-        navBarBackgroundColor: '#F1C533',
-        navBarButtonColor: '#00000f'
+        navBarTextColor: '#F5F2DC',
+        navBarBackgroundColor: '#FF5729',
+        navBarButtonColor: '#F5F2DC'
       };
 
     constructor(props) {
@@ -57,7 +57,7 @@ export default class FavsScreen extends React.Component {
         favs = this.state.favs
         return (
             
-            <View style={{flex:1, backgroundColor:'#1c1c1c'}}>
+            <View style={{flex:1, backgroundColor:'#454445'}}>
             <View>
             <Toast
     ref="toast"
@@ -74,7 +74,7 @@ export default class FavsScreen extends React.Component {
         duration={700}
         renderRow={(rowData) => this._renderRow(rowData, this.props.navigator)}
         onRemove={() => null}
-        /></View> : <Text style={{marginTop:100, alignSelf:'center', fontSize:18, fontWeight:'bold', color:'white'}}>No favs to display :(</Text>
+        /></View> : <Text style={{marginTop:100, alignSelf:'center', fontSize:18, fontWeight:'bold', color:'#ffffff'}}>No favs to display</Text>
             }
         </View>
         );

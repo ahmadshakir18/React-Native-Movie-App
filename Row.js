@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 16,
     fontWeight: 'bold',
-    color: "white"
+    color: "#F5F2DC"
   },
   synopsis: {
     marginLeft: 8,
@@ -53,7 +53,7 @@ class Row extends React.Component {
         </Text>
         </Text>
         <View style={styles.starRating}>
-        <Text style={{fontWeight: "bold", paddingLeft:5, color:"white"}}>Avg Rating:</Text>
+        <Text style={{fontWeight: "bold", paddingLeft:5, color:"#F5F2DC"}}>Avg Rating:</Text>
         <StarRating
         disabled={true}
         emptyStar={'ios-star-outline'}
