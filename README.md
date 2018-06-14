@@ -1,2 +1,2 @@
 # React-Native-Movie-App
-OMGS WOW MEOWS
+React native demo movie app 
