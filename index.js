@@ -6,10 +6,9 @@ import { Provider } from 'react-redux'
 import configureStore from './configureStore'
 import App from './app'
 import { Navigation } from 'react-native-navigation';
-import MovieDetailScreen from './Screens/MovieDetailScreen';
-import HomeScreen from './Screens/HomeScreen';
-import FavsScreen from './Screens/FavsScreen';
-import Row from './Row';
+import MovieDetailScreen from './Containers/MovieDetailScreen';
+import HomeScreen from './Containers/HomeScreen';
+import FavsScreen from './Containers/FavsScreen';
 
 const store = configureStore()
 

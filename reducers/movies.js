@@ -1,4 +1,4 @@
-import { FETCHING_MOVIES, FETCHING_MOVIES_SUCCESS, FETCHING_MOVIES_FAILURE, GET_FAVS_SUCCESS } from '../constants'
+import { FETCHING_MOVIES, FETCHING_MOVIES_SUCCESS, FETCHING_MOVIES_FAILURE, GET_FAVS_SUCCESS, SET_FAVS_SUCCESS } from '../constants'
 const initialState = {
   movies: [],
   isFetching: false,
@@ -33,6 +33,13 @@ export default function moviesReducer (state = initialState, action) {
         favs: state.favs
       }
     case GET_FAVS_SUCCESS:
+      return {
+        movies: state.movies,
+        error: state.error,
+        isFetching: state.isFetching,
+        favs: action.favs
+      }
+      case SET_FAVS_SUCCESS:
       return {
         movies: state.movies,
         error: state.error,
