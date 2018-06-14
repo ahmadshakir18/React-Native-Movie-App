@@ -1,14 +1,15 @@
 import React from 'react';
 import { Navigation } from 'react-native-navigation';
-import { TouchableOpacity, AsyncStorage, View, ListView, StyleSheet, Navigator, Dimensions } from 'react-native';
+import { TouchableOpacity, View, ListView } from 'react-native';
 import {Tile, Card, ListItem, Button, Text, List} from 'react-native-elements';
 import AnimatedList from 'react-native-animated-list';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import StarRating from 'react-native-star-rating';
 import Image from 'react-native-image-progress';
+import {styles} from './styles'
 
 
-class FavsRow extends React.Component {
+class FavRow extends React.Component {
 
   constructor(props) {
     super(props);
@@ -16,7 +17,7 @@ class FavsRow extends React.Component {
   <View style={{height:280}} >
     <Tile
         imageSrc={{ uri: props.movie.cardImages.slice(-1)[0].url}}
-        onPress={() => this.openMovieDetails(props.movie, props.navigation)}
+        onPress={() => this.props.onRowPress(props.movie)}
         imageContainerStyle={{backgroundColor: 'grey'}}
       >
         <View style={styles.cardOverlay}>
@@ -46,28 +47,6 @@ class FavsRow extends React.Component {
   );
 }
 
-openMovieDetails(movie, nav) {
-  nav.push({
-    screen: 'app.MovieDetailScreen',
-    title: movie.headline,
-    passProps: {
-      movie: movie
-    }
-  });
 }
 
-}
-
-
-  const styles = StyleSheet.create({
-    cardOverlay: {
-      marginTop: -90, 
-      backgroundColor: 'rgba(0, 0, 0, 0.55)',
-      height:70,
-      marginLeft: -15,
-      marginRight: -15
-    }
-  });
-
-
-  export default FavsRow;
+  export default FavRow;

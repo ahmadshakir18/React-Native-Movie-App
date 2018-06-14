@@ -3,53 +3,24 @@ import { View, Text, StyleSheet, TouchableOpacity, TouchableHighlight } from 're
 import Image from 'react-native-image-progress';
 import { Rating } from 'react-native-elements';
 import StarRating from 'react-native-star-rating'
+import {styles} from './styles'
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 12,
-    flexDirection: 'row',
-    alignItems: 'flex-start'
-  },
-  movieName: {
-    marginLeft: 8,
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: "#F5F2DC"
-  },
-  synopsis: {
-    marginLeft: 8,
-    marginRight: 8,
-    fontSize: 12,
-    fontWeight: 'normal'
-  },
-  photo: {
-    height: 180,
-    width: 128
-  },
-  starRating: {
-    alignSelf: "flex-start",
-    padding:5,
-    paddingLeft: 8
-  }
-});
-
-class Row extends React.Component {
+class MovieRow extends React.Component {
 
 
   constructor(props) {
     super(props);
     return (
       
-      <TouchableOpacity onPress={() => this.openMovieDetails(this.props[1], this.props[0])}>
+      <TouchableOpacity onPress={() => this.props.onRowPress(this.props.movie)}>
       <View style={styles.container}>
-        <Image source={{ uri: this.props[0].keyArtImages ? this.props[0].keyArtImages[0].url : ""}} style={styles.photo} />
+        <Image source={{ uri: this.props.movie.keyArtImages ? this.props.movie.keyArtImages[0].url : ""}} style={styles.photo} />
         <View style={{flex: 1, flexDirection: 'column', alignItems: 'center',}}>
         <Text style={styles.movieName}>
-          {this.props[0].headline + "\n"}
+          {this.props.movie.headline + "\n"}
           <Text style={styles.synopsis}>
-          {this.props[0].synopsis}
+          {this.props.movie.synopsis}
         </Text>
         </Text>
         <View style={styles.starRating}>
@@ -61,7 +32,7 @@ class Row extends React.Component {
         halfStar={'ios-star-half'}
         iconSet={'Ionicons'}
         maxStars={5}
-        rating={this.props[0].rating}
+        rating={this.props.movie.rating}
         fullStarColor={'#F1C533'}
         starSize={28}
       />
@@ -74,19 +45,8 @@ class Row extends React.Component {
 
         );
   }
-
-
-  openMovieDetails(nav, movie) {
-    nav.push({
-      screen: 'app.MovieDetailScreen',
-      title: movie.headline,
-      passProps: {
-        movie: movie
-      }
-    });
-  }
 }
 
 
 
-export default Row;
+export default MovieRow;

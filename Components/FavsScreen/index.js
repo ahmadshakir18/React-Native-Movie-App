@@ -5,31 +5,28 @@ import {Tile, Card, ListItem, Button, Text, List} from 'react-native-elements';
 import AnimatedList from 'react-native-animated-list';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Toast, {DURATION} from 'react-native-easy-toast';
-import FavsRow from '../FavsRow'
+import { styles, navBarStyle } from './styles'
+import FavRow from '../FavRow'
 
 
 export default class FavsScreen extends React.Component {
 
-    static navigatorStyle = {
-        navBarTextColor: '#F5F2DC',
-        navBarBackgroundColor: '#FF5729',
-        navBarButtonColor: '#F5F2DC'
-      };
+    static navigatorStyle = navBarStyle
 
     constructor(props) {
         super(props)
         this.state = {
-            favs: []
-          };
-        this.getFavsFromStorage()
+            favs : []
+        }
+        this.props.getFavs()
     }
 
     _renderRow(rowData, nav) {
-        return new FavsRow({movie: rowData, navigation: nav, onRemove: (movie) => this._removeItem(movie)})
+        return new FavRow({movie: rowData, onRowPress: (movie) => this.navigateToMovieDetailScreen(movie), onRemove: (movie) => this._removeItem(movie)})
     }
 
     _removeItem(movie) {
-        let favs = this.state.favs
+        favs = this.state.favs
         var ind = -1
         this.refs.toast.show('Movie removed from favorites :(');
         for (index in favs) {
@@ -37,24 +34,20 @@ export default class FavsScreen extends React.Component {
                 ind = index
             }
         }
+
         if (ind !== -1) {
             favs.splice(ind, 1);
-            this.updateFavsInStorage(favs)
+            this.setState({ favs: favs })
+            this.props.setFavs(favs)        
         }
         
       }
 
-
-      async updateFavsInStorage(favs) {
-
-        await AsyncStorage.setItem("favs", JSON.stringify(favs))
-        
-        this.setState({favs: favs})
+      componentWillReceiveProps(newProps) {
+        this.setState({ favs: newProps.favourites })
       }
 
     render() {
-        this.getFavsFromStorage()
-        favs = this.state.favs
         return (
             
             <View style={{flex:1, backgroundColor:'#454445'}}>
@@ -66,11 +59,11 @@ export default class FavsScreen extends React.Component {
     fadeInDuration={300}
     fadeOutDuration={1000}/>
     </View>
-            {favs.length > 0 ?
+            {this.state.favs.length > 0 ?
             <View style={{flex:1}}>
             <AnimatedList
             animation="scale"
-        items={favs}
+        items={this.state.favs}
         duration={700}
         renderRow={(rowData) => this._renderRow(rowData, this.props.navigator)}
         onRemove={() => null}
@@ -79,27 +72,16 @@ export default class FavsScreen extends React.Component {
         </View>
         );
     }
-    
 
-    _openDetails(movie) {
-        alert("lol")
+    navigateToMovieDetailScreen(movie) {
+        this.props.navigator.push({
+            screen: 'app.MovieDetailScreen',
+            title: movie.headline,
+            passProps: {
+              movie: movie
+            }
+          });
     }
-
-      async getFavsFromStorage() {
-        const favourites = await AsyncStorage.getItem("favs")
-        favs = (favourites !== null) ? JSON.parse(favourites) : []
-        this.setState({favs: favs})
-      }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1
-      },
-    separator: {
-        flex: 1,
-        height: StyleSheet.hairlineWidth,
-        backgroundColor: '#8E8E8E',
-      }
-  });
 
